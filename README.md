@@ -17,3 +17,4 @@ KOMOJU 全套英文文档的两项成果：AI 友好度质检 + API 文档内容
 - `交付纪律.md` — 硬纪律：所有 `.md` 交付物在提交/推送前**必须**通过中文书写规范门。
 - `scripts/zh_punct_lint.py` — 中文书写规范门禁（半角标点残留检查，退出码 0/1/2）。
 - `scripts/zh_punct_fix.py` — 配套就地修复器，把中文正文里的半角标点转全角。
+- `scripts/fetch_komoju_docs.py` — KOMOJU 全套英文文档抓取器，基于官网 `llms.txt` 机读清单随时拉取最新文档，按 `docs/reference/recipes/changelog/` 分目录落盘。用法：`python3 scripts/fetch_komoju_docs.py -o komoju_docs`（`--dry-run` 只列链接不落盘）。本仓库两份分析结论均基于该脚本抓取的快照产出，需复核或更新时可一键重抓。

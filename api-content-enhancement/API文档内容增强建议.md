@@ -1,16 +1,16 @@
-# KOMOJU 文档专业性 & 帮助性提升清单（通俗版 · 精确定位）
+# KOMOJU API 文档内容增强建议（通俗版 · 精确定位）
 
-> 本清单是对《KOMOJU 文档问题清单（通俗版 · 精确定位）》AI 友好度质检的**补充**，视角不同、内容**不重复**：质检报告聚焦「拼写错、抄错、示例对不上、坏 JSON、前后矛盾」这类**点状错误**；本清单站在 **API 使用者（开发者拿文档去接接口）** 的立场，聚焦「读不懂、不会填、缺依据」这类**专业性与帮助性的系统缺口**——即字段普遍无说明、枚举普遍不讲含义、错误码/限流普遍不写。这些不算「错」，但同样实实在在地挡住使用者。
+> 本清单是对《KOMOJU 文档问题清单（通俗版 · 精确定位）》AI 友好度质检的**补充**，视角不同、内容**不重复**：质检报告聚焦「拼写错、抄错、示例对不上、坏 JSON、前后矛盾」这类**点状错误**；本清单站在 **API 使用者（开发者拿文档去接接口）** 的立场，梳理「读不懂、不会填、缺依据」这类**可进一步补充的内容缺口**——即部分字段暂无说明、部分枚举未展开含义、错误码/限流信息可补齐。这些不算「错」，补上后能让文档对使用者更友好。
 >
-> 评审依据 api-doc-agent 技能的写作准则：① 每个字段要讲清「传什么/为什么传/怎么取」;② 枚举要逐值解释**业务含义**（取值字面量归结构，含义归说明）;③ 请求/返回标量字段要有满足自身约束的**示例值**;④ 拿不准的硬事实（默认值、错误码、限流）应显式补齐而非留白。
+> 参考 api-doc-agent 技能的写作准则：① 每个字段讲清「传什么/为什么传/怎么取」;② 枚举逐值解释**业务含义**（取值字面量归结构，含义归说明）;③ 请求/返回标量字段配上满足自身约束的**示例值**;④ 拿不准的硬事实（默认值、错误码、限流）显式补齐而非留白。
 >
 > **去重声明**：质检报告已提出的问题（`bardcode`/`transacion_key` 拼错、`first_two_digits_of_pin` 说明矛盾、`paySession`/`showFile` 抄错、示例请求/返回对不上、坏 JSON、`capture` 类型冲突、`tax` 默认矛盾、支付状态 6 vs 7、`next_capture_at`/`_date` 命名、标题撞车、`bank_id` 三字段同说明、错误码表叫法不一等），本清单**一律不再收录**。
 >
 > **定位方式**（沿用质检报告）：每条给两种定位——**① `.md` 原文位置**（纯文本文件，可 Ctrl+F，附行号 + 摘录）;**② 渲染页**（正式文档页，点开对照）。渲染页接口/示例字段默认折叠且 JS 动态生成，浏览器常搜不到，故精确定位请以左侧 `.md` 行号为准。
 >
-> 本清单共 **9 条**提升项（高 4 · 中高 4 · 中 1）。**改进建议已并入表格最右列**，可逐条对照修复。行号均逐条读原文核验。
+> 本清单共 **9 条**增强建议（高 4 · 中高 4 · 中 1）。**具体建议已并入表格最右列**，可逐条对照补充。行号均逐条读原文核验。
 
-| 严重度 | 类别 | 问题一句话 | 通俗说明（为什么挡住使用者） | `.md` 原文位置（附摘录） | 渲染页 | 改进建议 |
+| 优先级 | 类别 | 一句话 | 通俗说明（补上能帮到使用者什么） | `.md` 原文位置（附摘录） | 渲染页 | 增强建议 |
 |---|---|---|---|---|---|---|
 | 高 | API字段/帮助性 | **最核心的「支付状态」字段全程零说明** | `PaymentStatus` 是每次查支付/建支付都会读到的最关键字段，它列了 7 个取值却把 `description` 留成空串 `""`；全套 12+ 篇支付/会话接口文档里，没有一句话解释这个字段是干嘛的。开发者只看到一串状态词，不知道字段用途、也无从下手写状态判断。 | [reference/createpayment.md 第156行](https://doc.komoju.com/reference/createpayment.md)<br>`"PaymentStatus": {`<br>`  "enum": ["pending","authorized","captured","cancelled","expired","refunded","failed"],`<br>`  "example": "captured",`<br>`  "description": ""`<br>（同样空说明：[showpayment.md 第124行](https://doc.komoju.com/reference/showpayment.md)、[refundpayment.md 第154行](https://doc.komoju.com/reference/refundpayment.md)、paysession.md、showsession.md 等 12+ 篇） | [createpayment](https://doc.komoju.com/reference/createpayment)<br>[showpayment](https://doc.komoju.com/reference/showpayment) | 建议在 `reference/payments.md` 建一份**权威状态说明**，给 `description` 写清字段用途，各接口引用该处，杜绝再度漂移。 |
 | 高 | 枚举无含义/帮助性 | **支付状态 7 个取值没有一个解释含义** | 承上：`pending / authorized / captured / cancelled / expired / refunded / failed` 只有字面量，没告诉开发者「`authorized`（已授权未扣款）和 `captured`（已扣款）差在哪」「`expired` 和 `cancelled` 有何区别」。程序员只能靠猜写状态机，极易判错。 | [reference/createpayment.md 第158行](https://doc.komoju.com/reference/createpayment.md)<br>`"enum": ["pending","authorized","captured",`<br>`"cancelled","expired","refunded","failed"]`<br>`// 7 个取值，无逐值业务含义说明` | [createpayment](https://doc.komoju.com/reference/createpayment) | 逐值补业务含义，如 `authorized`=已授权待扣款、`captured`=已扣款、`expired`=支付超时失效、`refunded`=已退款、`failed`=支付失败。取值字面量保留在 `enum`，含义写进说明。 |
@@ -26,6 +26,6 @@
 
 ## 小结
 
-- **最大的帮助性缺口是「成规模的空白」**：核心字段 `PaymentStatus` / `SessionStatus` 全程无说明、关键枚举只列取值不讲含义、几乎所有接口不列专属错误码、全库无限流说明。这些让开发者无法仅凭文档正确、安全地接接口——是本轮最应优先补齐的部分，也与质检报告的点状纠错互补。
-- **建议建立「单一真相源」**：把状态、枚举、错误码集中到权威说明页（如 `reference/payments.md`），各接口引用，从机制上防止说明缺失与再度漂移。
+- **最值得优先补充的是「成规模的说明缺口」**：核心字段 `PaymentStatus` / `SessionStatus` 暂无说明、关键枚举只列取值未展开含义、多数接口未列专属错误码、全库暂无限流说明。补上这些能让开发者仅凭文档就正确、安全地接接口——是本轮建议优先补齐的部分，也与质检报告的点状纠错互补。
+- **建议建立「单一真相源」**：把状态、枚举、错误码集中到权威说明页（如 `reference/payments.md`），各接口引用，从机制上避免说明缺失与再度漂移。
 - 所有行号已逐条读原文核验；与《问题清单（通俗版 · 定位增强）》的 31 条问题**无重复**。

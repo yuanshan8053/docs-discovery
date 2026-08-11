@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>docs-discovery · KOMOJU 文档质检成果与历程</title>
-<meta name="description" content="KOMOJU 全套英文文档的三项工程化成果:AI 友好度质检、API 内容增强建议、内部跳转坏链扫描——每项可独立复现。" />
+<meta name="description" content="KOMOJU 全套英文文档的三项工程化成果：AI 友好度质检、API 内容增强建议、内部跳转坏链扫描——每项可独立复现。" />
 <style>
   :root{
     --bg:#070a12; --bg2:#0b1120; --panel:#0f1830; --panel2:#131f3d;
@@ -166,14 +166,14 @@
 <header class="hero">
   <div class="wrap">
     <div class="eyebrow">KOMOJU DOCS · DISCOVERY REPORT</div>
-    <h1>把文档可靠性,<br>做成一套 <span class="g">可复现、可定位、证据确凿</span> 的质检</h1>
+    <h1>把文档可靠性，<br>做成一套 <span class="g">可复现、可定位、证据确凿</span> 的质检</h1>
     <p class="lead">
-      对 KOMOJU 全套 <b>164 篇</b>英文文档<sup class="fn" title="docs / reference / recipes / changelog 四个目录,基于官网 llms.txt 机读清单抓取的快照">1</sup>,做三件事:AI 友好度质检、API 使用者视角的内容增强建议、以及全站内部跳转的离线坏链扫描<sup class="fn" title="不联网也能复现:比对本地文件 + llms.txt manifest 判定链接能否点到目标">2</sup>。每条问题都精确定位到 <code style="font-family:var(--mono);color:var(--cyan)">.md</code> 原文行号并附摘录,每项结论都能一键重跑。
+      对 KOMOJU 全套 <b>164 篇</b>英文文档<sup class="fn" title="docs / reference / recipes / changelog 四个目录，基于官网 llms.txt 机读清单抓取的快照">1</sup>，做三件事：AI 友好度质检、API 使用者视角的内容增强建议、以及全站内部跳转的离线坏链扫描<sup class="fn" title="不联网也能复现：比对本地文件 + llms.txt manifest 判定链接能否点到目标">2</sup>。每条问题都精确定位到 <code style="font-family:var(--mono);color:var(--cyan)">.md</code> 原文行号并附摘录，每项结论都能一键重跑。
     </p>
 
     <div class="fnnotes">
-      <div><b>1 · 快照抓取</b>　基于站点权威机读索引 <span class="mono">llms.txt</span>(167 条)随时拉最新文档,按目录落盘,三份分析结论均基于同一快照产出。</div>
-      <div><b>2 · 离线可复现</b>　坏链扫描不依赖联网:先归一化 6 种内部跳转写法,再对照本地 + 清单判死,退出码 0/1/2 可直接当 CI 判据。</div>
+      <div><b>1 · 快照抓取</b>　基于站点权威机读索引 <span class="mono">llms.txt</span>（167 条）随时拉最新文档，按目录落盘，三份分析结论均基于同一快照产出。</div>
+      <div><b>2 · 离线可复现</b>　坏链扫描不依赖联网：先归一化 6 种内部跳转写法，再对照本地 + 清单判死，退出码 0/1/2 可直接当 CI 判据。</div>
     </div>
 
     <div class="cta">
@@ -188,16 +188,16 @@
         <i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i>
         <span class="t">bash — check_links.py</span>
       </div>
-<pre><span class="c"># 离线复跑坏链扫描,退出码即 CI 判据</span>
+<pre><span class="c"># 离线复跑坏链扫描，退出码即 CI 判据</span>
 $ <span class="p">python3</span> scripts/check_links.py
   → 扫描 <span class="k">164</span> 篇、归一化 <span class="k">6</span> 种跳转写法
   → 坏链 {MISSING_TARGET:20, LEGACY_HOST:6, BROKEN_ANCHOR:2,
           README_PAGE_ORPHAN:2, LEGACY_SLUG:1}  <span class="k">共 31 处</span>
   <span class="c"># --json 结构化 / --live 才联网探活外链</span>
-  <span class="ok">✗ exit 1  (发现坏链)</span>
+  <span class="ok">✗ exit 1  （发现坏链）</span>
 
 $ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
-  <span class="ok">✓ [PASS]  中文书写规范门禁:exit 0</span></pre>
+  <span class="ok">✓ [PASS]  中文书写规范门禁：exit 0</span></pre>
     </div>
   </div>
 </header>
@@ -206,8 +206,8 @@ $ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
 <section id="overview">
   <div class="wrap">
     <div class="eyebrow">关键数字 · 每项可独立复现</div>
-    <h2 class="sec">三份成果,一组数字</h2>
-    <p class="sub">三份报告视角互补、内容不重复——一份查内容错,一份补内容缺,一份查链接死。</p>
+    <h2 class="sec">三份成果，一组数字</h2>
+    <p class="sub">三份报告视角互补、内容不重复——一份查内容错，一份补内容缺，一份查链接死。</p>
     <div class="stats">
       <div class="stat"><div class="n">164</div><div class="l">英文文档全量质检</div><div class="s">docs·reference·recipes·changelog</div></div>
       <div class="stat"><div class="n">31</div><div class="l">AI 友好度点状缺陷</div><div class="s">高 22 · 中高 7 · 中 2</div></div>
@@ -225,28 +225,28 @@ $ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
 <section id="journey">
   <div class="wrap">
     <div class="eyebrow">项目历程 / JOURNEY</div>
-    <h2 class="sec">先摸清语料,再定义坏链,各个击破</h2>
+    <h2 class="sec">先摸清语料，再定义坏链，各个击破</h2>
     <p class="sub">起点是对文档一无所知。节奏是「抓快照 → 摸清跳转写法 → 三条线分别质检 → 门禁收口交付」。</p>
     <div class="cards">
       <div class="jcard">
         <div class="no">01</div>
         <h3>抓取全站快照</h3>
-        <p>基于官网 <code>llms.txt</code> 机读清单(167 条)拉取最新文档,按 <code>docs/reference/recipes/changelog</code> 分目录落盘。三份分析全部基于同一快照,需要更新时 <code>fetch_komoju_docs.py</code> 一键重抓。</p>
+        <p>基于官网 <code>llms.txt</code> 机读清单（167 条）拉取最新文档，按 <code>docs/reference/recipes/changelog</code> 分目录落盘。三份分析全部基于同一快照，需要更新时 <code>fetch_komoju_docs.py</code> 一键重抓。</p>
       </div>
       <div class="jcard">
         <div class="no">02</div>
         <h3>摸清内部跳转写法</h3>
-        <p>先啃语料:内部跳转共 <b>6 种写法</b>——完整 URL、根相对、裸相对、版本前缀 <code>/v1.0/</code>、组件属性 <code>link=</code>、页内锚点。扫描器据此归一化,再谈判死,避免误伤。</p>
+        <p>先啃语料：内部跳转共 <b>6 种写法</b>——完整 URL、根相对、裸相对、版本前缀 <code>/v1.0/</code>、组件属性 <code>link=</code>、页内锚点。扫描器据此归一化，再谈判死，避免误伤。</p>
       </div>
       <div class="jcard">
         <div class="no">03</div>
         <h3>三条线分别质检</h3>
-        <p>AI 友好度查<b>内容错</b>(拼写/枚举/示例/矛盾),增强建议补<b>内容缺</b>(字段说明/错误码/限流),坏链扫描查<b>链接死</b>(404/锚点跳空/旧域名)。三者互补、严格去重。</p>
+        <p>AI 友好度查<b>内容错</b>（拼写/枚举/示例/矛盾），增强建议补<b>内容缺</b>（字段说明/错误码/限流），坏链扫描查<b>链接死</b>（404/锚点跳空/旧域名）。三者互补、严格去重。</p>
       </div>
       <div class="jcard">
         <div class="no">04</div>
         <h3>门禁收口交付</h3>
-        <p>所有 <code>.md</code> 交付物提交前<b>必须</b>过中文书写规范门(半角标点残留检查)。首份交付曾查出 118 处残留,此后确立硬纪律:<b>门禁不过,不予交付。</b></p>
+        <p>所有 <code>.md</code> 交付物提交前<b>必须</b>过中文书写规范门（半角标点残留检查）。首份交付曾查出 118 处残留，此后确立硬纪律：<b>门禁不过，不予交付。</b></p>
       </div>
     </div>
   </div>
@@ -256,14 +256,14 @@ $ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
 <section id="deliverables">
   <div class="wrap">
     <div class="eyebrow">高价值产物 / DELIVERABLES</div>
-    <h2 class="sec">三份成果,各自可独立消费</h2>
-    <p class="sub">每份都给两种定位:<code>.md</code> 原文位置(行号 + 摘录)与渲染页链接,点开即可对照。</p>
+    <h2 class="sec">三份成果，各自可独立消费</h2>
+    <p class="sub">每份都给两种定位：<code>.md</code> 原文位置（行号 + 摘录）与渲染页链接，点开即可对照。</p>
     <div class="dgrid">
 
       <div class="dcard">
         <div class="kicker">ai-friendly-check</div>
         <h3>AI 友好度质检</h3>
-        <p>逐篇质检:字段名拼写、说明与实现一致性、枚举缺失、跨文档口径冲突、代码示例可运行性、术语命名一致性。共 <b>31 条点状缺陷</b>,如 <code>bardcode</code>/<code>transacion_key</code> 拼错(波及 14 篇)、坏 JSON 示例、<code>tax</code> 默认口径跨版本打架。</p>
+        <p>逐篇质检：字段名拼写、说明与实现一致性、枚举缺失、跨文档口径冲突、代码示例可运行性、术语命名一致性。共 <b>31 条点状缺陷</b>，如 <code>bardcode</code>/<code>transacion_key</code> 拼错（波及 14 篇）、坏 JSON 示例、<code>tax</code> 默认口径跨版本打架。</p>
         <div class="pills">
           <span class="pill h">高 22</span><span class="pill m">中高 7</span><span class="pill">中 2</span>
         </div>
@@ -275,7 +275,7 @@ $ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
       <div class="dcard">
         <div class="kicker">api-content-enhancement</div>
         <h3>API 内容增强建议</h3>
-        <p>站在 API 使用者立场,梳理「读不懂、不会填、缺依据」的内容缺口(非「错」)。共 <b>9 条建议</b>:核心接口零错误响应声明、全库仅 1 篇提 429、支付/会话状态枚举无业务含义、退款账户类型三值未解释。与质检清单严格不重复。</p>
+        <p>站在 API 使用者立场，梳理「读不懂、不会填、缺依据」的内容缺口（非「错」）。共 <b>9 条建议</b>：核心接口零错误响应声明、全库仅 1 篇提 429、支付/会话状态枚举无业务含义、退款账户类型三值未解释。与质检清单严格不重复。</p>
         <div class="pills">
           <span class="pill h">高 4</span><span class="pill m">中高 4</span><span class="pill">中 1</span>
         </div>
@@ -287,7 +287,7 @@ $ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
       <div class="dcard">
         <div class="kicker">broken-link-check</div>
         <h3>内部跳转坏链扫描</h3>
-        <p>先摸清 6 种跳转写法,再据 KOMOJU 实况定义 5 类坏链,离线扫全站。共 <b>31 条坏链</b>,精确到行号 + 修复方向。绝大多数(<b>26/31</b>)是 ReadMe → 现行站点迁移时 slug / 域名未归一化的遗留。</p>
+        <p>先摸清 6 种跳转写法，再据 KOMOJU 实况定义 5 类坏链，离线扫全站。共 <b>31 条坏链</b>，精确到行号 + 修复方向。绝大多数（<b>26/31</b>）是 ReadMe → 现行站点迁移时 slug / 域名未归一化的遗留。</p>
         <div class="pills">
           <span class="pill c">MISSING 20</span><span class="pill c">LEGACY_HOST 6</span><span class="pill c">ANCHOR 2</span><span class="pill c">ORPHAN 2</span><span class="pill c">SLUG 1</span>
         </div>
@@ -306,16 +306,16 @@ $ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
   <div class="wrap">
     <div class="eyebrow">坏链谱系 / TAXONOMY</div>
     <h2 class="sec">为 KOMOJU 定义的 5 类坏链</h2>
-    <p class="sub">沿用「extract → 分类 link_type → 对照 manifest → 给 verdict」的流水线思想,但类型与判据按 KOMOJU 实况重写。</p>
+    <p class="sub">沿用「extract → 分类 link_type → 对照 manifest → 给 verdict」的流水线思想，但类型与判据按 KOMOJU 实况重写。</p>
     <div class="tbl">
       <table>
         <thead><tr><th>坏链类型</th><th>判定</th><th>后果</th><th>数量</th></tr></thead>
         <tbody>
           <tr><td>MISSING_TARGET</td><td>内部 doc/reference/recipe slug 本地与 <code>llms.txt</code> 均无</td><td><b>点进去 404</b></td><td>20</td></tr>
           <tr><td>LEGACY_HOST</td><td>指向旧域名 <code>komoju-docs.readme.io</code> 而非 <code>doc.komoju.com</code></td><td><b>跳出当前站 / 潜在失效</b></td><td>6</td></tr>
-          <tr><td>BROKEN_ANCHOR</td><td>目标页存在,但 <code>#anchor</code> 匹配不到任何标题</td><td><b>跳到页顶 / 跳空</b></td><td>2</td></tr>
-          <tr><td>README_PAGE_ORPHAN</td><td><code>/page/&lt;slug&gt;</code> 这类 ReadMe 专有构造,无对应文档</td><td><b>死链</b></td><td>2</td></tr>
-          <tr><td>LEGACY_SLUG</td><td>单段根级遗留 slug(如 <code>/payments-1</code>)映射不到任何页</td><td><b>死链</b></td><td>1</td></tr>
+          <tr><td>BROKEN_ANCHOR</td><td>目标页存在，但 <code>#anchor</code> 匹配不到任何标题</td><td><b>跳到页顶 / 跳空</b></td><td>2</td></tr>
+          <tr><td>README_PAGE_ORPHAN</td><td><code>/page/&lt;slug&gt;</code> 这类 ReadMe 专有构造，无对应文档</td><td><b>死链</b></td><td>2</td></tr>
+          <tr><td>LEGACY_SLUG</td><td>单段根级遗留 slug（如 <code>/payments-1</code>）映射不到任何页</td><td><b>死链</b></td><td>1</td></tr>
         </tbody>
       </table>
     </div>
@@ -326,16 +326,16 @@ $ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
 <section id="pipeline">
   <div class="wrap">
     <div class="eyebrow">交付纪律与工具 / TOOLCHAIN</div>
-    <h2 class="sec">四个脚本,离线可复现</h2>
-    <p class="sub">抓取、扫描、门禁、修复各司其职,退出码可直接接进 CI。</p>
+    <h2 class="sec">四个脚本，离线可复现</h2>
+    <p class="sub">抓取、扫描、门禁、修复各司其职，退出码可直接接进 CI。</p>
     <div class="tbl">
       <table>
         <thead><tr><th>脚本</th><th>职责</th><th>用法</th><th>判据</th></tr></thead>
         <tbody>
-          <tr><td>fetch_komoju_docs.py</td><td>基于 <code>llms.txt</code> 抓取全套文档快照,按目录落盘</td><td><code>-o komoju_docs</code> / <code>--dry-run</code></td><td class="ok-tag">快照产出</td></tr>
-          <tr><td>check_links.py</td><td>离线扫全站,分类归一化后对照 manifest 判死</td><td><code>--json</code> / <code>--live</code></td><td class="ok-tag">exit 0 / 1 / 2</td></tr>
-          <tr><td>zh_punct_lint.py</td><td>中文书写规范门禁:半角标点残留检查,精确到 <code>file:line:col</code></td><td><code>&lt;改动的 .md ...&gt;</code></td><td class="ok-tag">exit 0 = 放行</td></tr>
-          <tr><td>zh_punct_fix.py</td><td>配套就地修复器,把中文正文里的半角标点转全角(跳过代码/URL)</td><td><code>&lt;改动的 .md ...&gt;</code></td><td class="ok-tag">就地改写</td></tr>
+          <tr><td>fetch_komoju_docs.py</td><td>基于 <code>llms.txt</code> 抓取全套文档快照，按目录落盘</td><td><code>-o komoju_docs</code> / <code>--dry-run</code></td><td class="ok-tag">快照产出</td></tr>
+          <tr><td>check_links.py</td><td>离线扫全站，分类归一化后对照 manifest 判死</td><td><code>--json</code> / <code>--live</code></td><td class="ok-tag">exit 0 / 1 / 2</td></tr>
+          <tr><td>zh_punct_lint.py</td><td>中文书写规范门禁：半角标点残留检查，精确到 <code>file:line:col</code></td><td><code>改动的 .md 文件</code></td><td class="ok-tag">exit 0 = 放行</td></tr>
+          <tr><td>zh_punct_fix.py</td><td>配套就地修复器，把中文正文里的半角标点转全角（跳过代码/URL）</td><td><code>改动的 .md 文件</code></td><td class="ok-tag">就地改写</td></tr>
         </tbody>
       </table>
     </div>
@@ -351,23 +351,23 @@ $ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
     <div class="rules">
       <div class="rule">
         <div class="rk">discipline/precise-location.rule <span class="tag">每条双定位</span></div>
-        <h4>01　精确定位,不放空话</h4>
-        <p>每条问题都给两种定位:<code>.md</code> 原文行号 + 摘录、及渲染页链接。渲染页字段 JS 动态生成、常搜不到,故精确定位一律以 <code>.md</code> 行号为准。</p>
+        <h4>01　精确定位，不放空话</h4>
+        <p>每条问题都给两种定位：<code>.md</code> 原文行号 + 摘录、及渲染页链接。渲染页字段 JS 动态生成、常搜不到，故精确定位一律以 <code>.md</code> 行号为准。</p>
       </div>
       <div class="rule">
         <div class="rk">discipline/no-overlap.rule <span class="tag">三线互补</span></div>
         <h4>02　三份成果严格去重</h4>
-        <p>质检查<b>内容错</b>、增强补<b>内容缺</b>、坏链查<b>链接死</b>——同一问题只在一份里出现。增强清单开篇即声明:质检已提的一律不再收录。</p>
+        <p>质检查<b>内容错</b>、增强补<b>内容缺</b>、坏链查<b>链接死</b>——同一问题只在一份里出现。增强清单开篇即声明：质检已提的一律不再收录。</p>
       </div>
       <div class="rule">
         <div class="rk">discipline/offline-reproducible.rule <span class="tag">exit code = CI</span></div>
-        <h4>03　离线可复现,退出码定判</h4>
-        <p>坏链判定不依赖联网:比对本地文件 + <code>llms.txt</code> 清单;外链默认只分类不判死,<code>--live</code> 才探活。退出码 <code>0/1/2</code> 直接当 CI 判据。</p>
+        <h4>03　离线可复现，退出码定判</h4>
+        <p>坏链判定不依赖联网：比对本地文件 + <code>llms.txt</code> 清单；外链默认只分类不判死，<code>--live</code> 才探活。退出码 <code>0/1/2</code> 直接当 CI 判据。</p>
       </div>
       <div class="rule">
         <div class="rk">discipline/zh-punct-gate.rule <span class="tag">门禁不过不交付</span></div>
-        <h4>04　中文书写规范门,一处不漏</h4>
-        <p>中文正文半角标点紧邻汉字即判残留,必须转全角(代码块/行内代码/URL 自动豁免)。首份交付曾查出 <b>118 处</b>残留,此后:<b>门禁不过,不予交付。</b></p>
+        <h4>04　中文书写规范门，一处不漏</h4>
+        <p>中文正文半角标点紧邻汉字即判残留，必须转全角（代码块/行内代码/URL 自动豁免）。首份交付曾查出 <b>118 处</b>残留，此后：<b>门禁不过，不予交付。</b></p>
       </div>
     </div>
   </div>
@@ -375,7 +375,7 @@ $ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
 
 <footer>
   <div class="wrap fin">
-    <div>docs-discovery · KOMOJU 文档质检 &nbsp;|&nbsp; 标准:精确定位、离线可复现、证据确凿</div>
+    <div>docs-discovery · KOMOJU 文档质检 &nbsp;|&nbsp; 标准：精确定位、离线可复现、证据确凿</div>
     <div>
       <a href="https://github.com/yuanshan8053/docs-discovery" target="_blank">GitHub 仓库</a> ·
       <a href="https://github.com/yuanshan8053/docs-discovery/blob/main/README.md" target="_blank">README</a>

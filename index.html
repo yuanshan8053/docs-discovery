@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>docs-discovery · KOMOJU 文档质检成果与历程</title>
+<meta name="description" content="KOMOJU 全套英文文档的三项工程化成果:AI 友好度质检、API 内容增强建议、内部跳转坏链扫描——每项可独立复现。" />
+<style>
+  :root{
+    --bg:#070a12; --bg2:#0b1120; --panel:#0f1830; --panel2:#131f3d;
+    --line:rgba(120,160,255,.14); --line2:rgba(120,160,255,.28);
+    --ink:#eef3ff; --muted:#9fb0d4; --dim:#6b7ba6;
+    --brand:#5b8bff; --brand2:#7c5cff; --cyan:#38e1d0; --amber:#ffcf6b; --rose:#ff7a92;
+    --glow:0 0 0 1px rgba(120,160,255,.10), 0 24px 60px -30px rgba(30,60,160,.7);
+    --mono:"SF Mono",ui-monospace,"JetBrains Mono","Menlo",Consolas,monospace;
+    --sans:"Inter","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:
+      radial-gradient(1200px 700px at 80% -10%, rgba(92,124,255,.16), transparent 60%),
+      radial-gradient(900px 600px at 5% 10%, rgba(124,92,255,.12), transparent 55%),
+      var(--bg);
+    color:var(--ink); font-family:var(--sans); line-height:1.6;
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+
+  /* NAV */
+  nav.top{
+    position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+    background:linear-gradient(180deg,rgba(7,10,18,.92),rgba(7,10,18,.62));
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{display:flex;align-items:center;gap:20px;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px;font-size:14px}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+  .brand .crumb{color:var(--dim);font-weight:500}
+  .nav-links{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .nav-links a{padding:7px 13px;border-radius:8px;font-size:13px;color:var(--muted);border:1px solid transparent}
+  .nav-links a:hover{color:var(--ink);border-color:var(--line2);background:rgba(120,160,255,.06)}
+  .badge{margin-left:6px;font-size:11.5px;color:var(--cyan);border:1px solid var(--line2);
+    padding:5px 10px;border-radius:999px;font-family:var(--mono);white-space:nowrap}
+
+  section{padding:92px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brand);margin-bottom:14px}
+  h2.sec{font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-.02em;line-height:1.15}
+  .sub{color:var(--muted);margin-top:12px;max-width:720px;font-size:16px}
+
+  /* HERO */
+  .hero{padding:96px 0 84px}
+  .hero h1{font-size:clamp(34px,6.4vw,68px);font-weight:850;letter-spacing:-.03em;line-height:1.06}
+  .hero h1 .g{background:linear-gradient(100deg,var(--brand),var(--brand2) 55%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{color:var(--muted);font-size:clamp(16px,1.7vw,19px);max-width:760px;margin-top:24px}
+  sup.fn{color:var(--cyan);font-family:var(--mono);font-size:.62em;padding:0 2px;cursor:help}
+  .fnnotes{margin-top:26px;display:grid;gap:8px;max-width:760px}
+  .fnnotes div{font-size:13px;color:var(--dim);border-left:2px solid var(--line2);padding-left:12px}
+  .fnnotes b{color:var(--muted);font-family:var(--mono)}
+  .cta{margin-top:34px;display:flex;gap:12px;flex-wrap:wrap}
+  .cta a{padding:11px 18px;border-radius:11px;font-size:14px;font-weight:600;border:1px solid var(--line2);
+    background:rgba(120,160,255,.06);transition:.15s}
+  .cta a:hover{transform:translateY(-2px);border-color:var(--brand);background:rgba(91,139,255,.14)}
+  .cta a.primary{background:linear-gradient(100deg,var(--brand),var(--brand2));border-color:transparent;color:#fff}
+  .cta a .arr{color:var(--cyan);margin-left:6px}
+  .cta a.primary .arr{color:#dbe6ff}
+
+  /* code repro block */
+  .repro{margin-top:38px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:linear-gradient(180deg,var(--panel),var(--bg2));box-shadow:var(--glow);max-width:760px}
+  .repro .bar{display:flex;align-items:center;gap:8px;padding:11px 15px;border-bottom:1px solid var(--line);background:rgba(120,160,255,.04)}
+  .repro .bar i{width:11px;height:11px;border-radius:50%;display:inline-block}
+  .repro .bar .t{margin-left:8px;font-family:var(--mono);font-size:12px;color:var(--dim)}
+  .repro pre{padding:16px 18px;font-family:var(--mono);font-size:12.8px;line-height:1.75;overflow-x:auto;color:#cfe0ff}
+  .repro .c{color:var(--dim)} .repro .p{color:var(--cyan)} .repro .ok{color:#6be59a} .repro .k{color:var(--amber)}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px}
+  .stat{border:1px solid var(--line);border-radius:14px;padding:22px 18px;background:linear-gradient(180deg,var(--panel),transparent);position:relative;overflow:hidden}
+  .stat:hover{border-color:var(--line2)}
+  .stat .n{font-size:clamp(30px,4vw,42px);font-weight:850;letter-spacing:-.02em;background:linear-gradient(120deg,#fff,var(--brand));-webkit-background-clip:text;background-clip:text;color:transparent;font-family:var(--mono)}
+  .stat .l{color:var(--muted);font-size:13.5px;margin-top:8px}
+  .stat .s{color:var(--dim);font-size:12px;margin-top:5px;font-family:var(--mono)}
+
+  /* JOURNEY */
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:36px}
+  .jcard{border:1px solid var(--line);border-radius:16px;padding:24px;background:linear-gradient(180deg,var(--panel),transparent);transition:.18s}
+  .jcard:hover{transform:translateY(-3px);border-color:var(--line2);box-shadow:var(--glow)}
+  .jcard .no{font-family:var(--mono);font-size:13px;color:var(--brand);font-weight:700}
+  .jcard h3{font-size:18px;margin:10px 0 10px;font-weight:700}
+  .jcard p{color:var(--muted);font-size:14.5px}
+  .jcard code{font-family:var(--mono);font-size:.86em;color:var(--cyan);background:rgba(56,225,208,.08);padding:1px 6px;border-radius:5px}
+
+  /* DELIVERABLES */
+  .dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
+  .dcard{border:1px solid var(--line);border-radius:16px;padding:24px;background:linear-gradient(180deg,var(--panel2),var(--bg2));display:flex;flex-direction:column;transition:.18s}
+  .dcard:hover{transform:translateY(-3px);border-color:var(--brand);box-shadow:var(--glow)}
+  .dcard .kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+  .dcard h3{font-size:19px;font-weight:800;margin:8px 0 12px}
+  .dcard p{color:var(--muted);font-size:14px;flex:1}
+  .pills{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0}
+  .pill{font-family:var(--mono);font-size:11.5px;padding:4px 9px;border-radius:999px;border:1px solid var(--line2);color:var(--muted)}
+  .pill.h{color:var(--rose);border-color:rgba(255,122,146,.35)}
+  .pill.m{color:var(--amber);border-color:rgba(255,207,107,.35)}
+  .pill.c{color:var(--cyan);border-color:rgba(56,225,208,.35)}
+  .dlinks{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px}
+  .dlinks a{font-size:13px;color:var(--brand);font-weight:600}
+  .dlinks a:hover{color:var(--cyan)}
+  .dlinks a .arr{opacity:.7}
+
+  /* PIPELINE TABLE */
+  .tbl{margin-top:34px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  thead th{background:rgba(120,160,255,.06);text-align:left;padding:14px 16px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-weight:600}
+  tbody td{padding:14px 16px;border-top:1px solid var(--line);color:var(--muted);vertical-align:top}
+  tbody tr:hover{background:rgba(120,160,255,.03)}
+  tbody td:first-child{font-family:var(--mono);color:var(--brand);font-weight:700;white-space:nowrap}
+  tbody td b{color:var(--ink);font-weight:600}
+  tbody code{font-family:var(--mono);font-size:.86em;color:var(--cyan)}
+  .ok-tag{color:#6be59a;font-family:var(--mono);font-size:12.5px}
+
+  /* DISCIPLINE */
+  .rules{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:36px}
+  .rule{border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:12px;padding:22px 24px;background:linear-gradient(180deg,var(--panel),transparent)}
+  .rule .rk{font-family:var(--mono);font-size:12.5px;color:var(--dim);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .rule .rk .tag{color:var(--amber);border:1px solid rgba(255,207,107,.3);padding:2px 8px;border-radius:999px;font-size:11px}
+  .rule h4{font-size:16.5px;margin:12px 0 8px;font-weight:700}
+  .rule p{color:var(--muted);font-size:14px}
+  .rule p code{font-family:var(--mono);font-size:.86em;color:var(--cyan);background:rgba(56,225,208,.08);padding:1px 6px;border-radius:5px}
+
+  footer{padding:48px 0 60px;color:var(--dim);font-size:13.5px}
+  footer .fin{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+
+  @media(max-width:860px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .cards,.dgrid,.rules{grid-template-columns:1fr}
+    .nav-links{display:none}
+    section{padding:64px 0}
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap nav-in">
+    <div class="brand">
+      <span class="dot"></span>
+      docs-discovery
+      <span class="crumb">/ KOMOJU 文档质检</span>
+    </div>
+    <div class="nav-links">
+      <a href="#overview">概览</a>
+      <a href="#journey">历程</a>
+      <a href="#deliverables">产物</a>
+      <a href="#types">坏链谱系</a>
+      <a href="#pipeline">工具链</a>
+      <a href="#discipline">纪律</a>
+    </div>
+    <span class="badge">● offline check · exit 0</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">KOMOJU DOCS · DISCOVERY REPORT</div>
+    <h1>把文档可靠性,<br>做成一套 <span class="g">可复现、可定位、证据确凿</span> 的质检</h1>
+    <p class="lead">
+      对 KOMOJU 全套 <b>164 篇</b>英文文档<sup class="fn" title="docs / reference / recipes / changelog 四个目录,基于官网 llms.txt 机读清单抓取的快照">1</sup>,做三件事:AI 友好度质检、API 使用者视角的内容增强建议、以及全站内部跳转的离线坏链扫描<sup class="fn" title="不联网也能复现:比对本地文件 + llms.txt manifest 判定链接能否点到目标">2</sup>。每条问题都精确定位到 <code style="font-family:var(--mono);color:var(--cyan)">.md</code> 原文行号并附摘录,每项结论都能一键重跑。
+    </p>
+
+    <div class="fnnotes">
+      <div><b>1 · 快照抓取</b>　基于站点权威机读索引 <span class="mono">llms.txt</span>(167 条)随时拉最新文档,按目录落盘,三份分析结论均基于同一快照产出。</div>
+      <div><b>2 · 离线可复现</b>　坏链扫描不依赖联网:先归一化 6 种内部跳转写法,再对照本地 + 清单判死,退出码 0/1/2 可直接当 CI 判据。</div>
+    </div>
+
+    <div class="cta">
+      <a class="primary" href="https://github.com/yuanshan8053/docs-discovery/blob/main/ai-friendly-check/%E9%97%AE%E9%A2%98%E6%B8%85%E5%8D%95.md" target="_blank">AI 友好度质检 <span class="arr">↗</span></a>
+      <a href="https://github.com/yuanshan8053/docs-discovery/blob/main/api-content-enhancement/API%E6%96%87%E6%A1%A3%E5%86%85%E5%AE%B9%E5%A2%9E%E5%BC%BA%E5%BB%BA%E8%AE%AE.md" target="_blank">内容增强建议 <span class="arr">↗</span></a>
+      <a href="https://github.com/yuanshan8053/docs-discovery/blob/main/broken-link-check/%E5%9D%8F%E9%93%BE%E6%B8%85%E5%8D%95.md" target="_blank">坏链清单 <span class="arr">↗</span></a>
+      <a href="https://github.com/yuanshan8053/docs-discovery" target="_blank">GitHub 源码 <span class="arr">↗</span></a>
+    </div>
+
+    <div class="repro">
+      <div class="bar">
+        <i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i>
+        <span class="t">bash — check_links.py</span>
+      </div>
+<pre><span class="c"># 离线复跑坏链扫描,退出码即 CI 判据</span>
+$ <span class="p">python3</span> scripts/check_links.py
+  → 扫描 <span class="k">164</span> 篇、归一化 <span class="k">6</span> 种跳转写法
+  → 坏链 {MISSING_TARGET:20, LEGACY_HOST:6, BROKEN_ANCHOR:2,
+          README_PAGE_ORPHAN:2, LEGACY_SLUG:1}  <span class="k">共 31 处</span>
+  <span class="c"># --json 结构化 / --live 才联网探活外链</span>
+  <span class="ok">✗ exit 1  (发现坏链)</span>
+
+$ <span class="p">python3</span> scripts/zh_punct_lint.py **/*.md
+  <span class="ok">✓ [PASS]  中文书写规范门禁:exit 0</span></pre>
+    </div>
+  </div>
+</header>
+
+<!-- OVERVIEW / STATS -->
+<section id="overview">
+  <div class="wrap">
+    <div class="eyebrow">关键数字 · 每项可独立复现</div>
+    <h2 class="sec">三份成果,一组数字</h2>
+    <p class="sub">三份报告视角互补、内容不重复——一份查内容错,一份补内容缺,一份查链接死。</p>
+    <div class="stats">
+      <div class="stat"><div class="n">164</div><div class="l">英文文档全量质检</div><div class="s">docs·reference·recipes·changelog</div></div>
+      <div class="stat"><div class="n">31</div><div class="l">AI 友好度点状缺陷</div><div class="s">高 22 · 中高 7 · 中 2</div></div>
+      <div class="stat"><div class="n">9</div><div class="l">API 内容增强建议</div><div class="s">高 4 · 中高 4 · 中 1</div></div>
+      <div class="stat"><div class="n">31</div><div class="l">内部跳转坏链</div><div class="s">5 类 · 精确到行号</div></div>
+      <div class="stat"><div class="n">6</div><div class="l">种内部跳转写法归一化</div><div class="s">判定坏链的前置依据</div></div>
+      <div class="stat"><div class="n">26/31</div><div class="l">坏链源自迁移遗留</div><div class="s">ReadMe → 现行站点</div></div>
+      <div class="stat"><div class="n">3</div><div class="l">离线可复现的扫描/门禁脚本</div><div class="s">check_links · zh_punct · fetch</div></div>
+      <div class="stat"><div class="n">0</div><div class="l">交付物半角标点残留</div><div class="s">中文书写规范门 exit 0</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section id="journey">
+  <div class="wrap">
+    <div class="eyebrow">项目历程 / JOURNEY</div>
+    <h2 class="sec">先摸清语料,再定义坏链,各个击破</h2>
+    <p class="sub">起点是对文档一无所知。节奏是「抓快照 → 摸清跳转写法 → 三条线分别质检 → 门禁收口交付」。</p>
+    <div class="cards">
+      <div class="jcard">
+        <div class="no">01</div>
+        <h3>抓取全站快照</h3>
+        <p>基于官网 <code>llms.txt</code> 机读清单(167 条)拉取最新文档,按 <code>docs/reference/recipes/changelog</code> 分目录落盘。三份分析全部基于同一快照,需要更新时 <code>fetch_komoju_docs.py</code> 一键重抓。</p>
+      </div>
+      <div class="jcard">
+        <div class="no">02</div>
+        <h3>摸清内部跳转写法</h3>
+        <p>先啃语料:内部跳转共 <b>6 种写法</b>——完整 URL、根相对、裸相对、版本前缀 <code>/v1.0/</code>、组件属性 <code>link=</code>、页内锚点。扫描器据此归一化,再谈判死,避免误伤。</p>
+      </div>
+      <div class="jcard">
+        <div class="no">03</div>
+        <h3>三条线分别质检</h3>
+        <p>AI 友好度查<b>内容错</b>(拼写/枚举/示例/矛盾),增强建议补<b>内容缺</b>(字段说明/错误码/限流),坏链扫描查<b>链接死</b>(404/锚点跳空/旧域名)。三者互补、严格去重。</p>
+      </div>
+      <div class="jcard">
+        <div class="no">04</div>
+        <h3>门禁收口交付</h3>
+        <p>所有 <code>.md</code> 交付物提交前<b>必须</b>过中文书写规范门(半角标点残留检查)。首份交付曾查出 118 处残留,此后确立硬纪律:<b>门禁不过,不予交付。</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section id="deliverables">
+  <div class="wrap">
+    <div class="eyebrow">高价值产物 / DELIVERABLES</div>
+    <h2 class="sec">三份成果,各自可独立消费</h2>
+    <p class="sub">每份都给两种定位:<code>.md</code> 原文位置(行号 + 摘录)与渲染页链接,点开即可对照。</p>
+    <div class="dgrid">
+
+      <div class="dcard">
+        <div class="kicker">ai-friendly-check</div>
+        <h3>AI 友好度质检</h3>
+        <p>逐篇质检:字段名拼写、说明与实现一致性、枚举缺失、跨文档口径冲突、代码示例可运行性、术语命名一致性。共 <b>31 条点状缺陷</b>,如 <code>bardcode</code>/<code>transacion_key</code> 拼错(波及 14 篇)、坏 JSON 示例、<code>tax</code> 默认口径跨版本打架。</p>
+        <div class="pills">
+          <span class="pill h">高 22</span><span class="pill m">中高 7</span><span class="pill">中 2</span>
+        </div>
+        <div class="dlinks">
+          <a href="https://github.com/yuanshan8053/docs-discovery/blob/main/ai-friendly-check/%E9%97%AE%E9%A2%98%E6%B8%85%E5%8D%95.md" target="_blank">问题清单 <span class="arr">↗</span></a>
+        </div>
+      </div>
+
+      <div class="dcard">
+        <div class="kicker">api-content-enhancement</div>
+        <h3>API 内容增强建议</h3>
+        <p>站在 API 使用者立场,梳理「读不懂、不会填、缺依据」的内容缺口(非「错」)。共 <b>9 条建议</b>:核心接口零错误响应声明、全库仅 1 篇提 429、支付/会话状态枚举无业务含义、退款账户类型三值未解释。与质检清单严格不重复。</p>
+        <div class="pills">
+          <span class="pill h">高 4</span><span class="pill m">中高 4</span><span class="pill">中 1</span>
+        </div>
+        <div class="dlinks">
+          <a href="https://github.com/yuanshan8053/docs-discovery/blob/main/api-content-enhancement/API%E6%96%87%E6%A1%A3%E5%86%85%E5%AE%B9%E5%A2%9E%E5%BC%BA%E5%BB%BA%E8%AE%AE.md" target="_blank">增强建议 <span class="arr">↗</span></a>
+        </div>
+      </div>
+
+      <div class="dcard">
+        <div class="kicker">broken-link-check</div>
+        <h3>内部跳转坏链扫描</h3>
+        <p>先摸清 6 种跳转写法,再据 KOMOJU 实况定义 5 类坏链,离线扫全站。共 <b>31 条坏链</b>,精确到行号 + 修复方向。绝大多数(<b>26/31</b>)是 ReadMe → 现行站点迁移时 slug / 域名未归一化的遗留。</p>
+        <div class="pills">
+          <span class="pill c">MISSING 20</span><span class="pill c">LEGACY_HOST 6</span><span class="pill c">ANCHOR 2</span><span class="pill c">ORPHAN 2</span><span class="pill c">SLUG 1</span>
+        </div>
+        <div class="dlinks">
+          <a href="https://github.com/yuanshan8053/docs-discovery/blob/main/broken-link-check/%E5%9D%8F%E9%93%BE%E6%B8%85%E5%8D%95.md" target="_blank">坏链清单 <span class="arr">↗</span></a>
+          <a href="https://github.com/yuanshan8053/docs-discovery/blob/main/scripts/check_links.py" target="_blank">扫描器源码 <span class="arr">↗</span></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BROKEN LINK TYPES -->
+<section id="types">
+  <div class="wrap">
+    <div class="eyebrow">坏链谱系 / TAXONOMY</div>
+    <h2 class="sec">为 KOMOJU 定义的 5 类坏链</h2>
+    <p class="sub">沿用「extract → 分类 link_type → 对照 manifest → 给 verdict」的流水线思想,但类型与判据按 KOMOJU 实况重写。</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>坏链类型</th><th>判定</th><th>后果</th><th>数量</th></tr></thead>
+        <tbody>
+          <tr><td>MISSING_TARGET</td><td>内部 doc/reference/recipe slug 本地与 <code>llms.txt</code> 均无</td><td><b>点进去 404</b></td><td>20</td></tr>
+          <tr><td>LEGACY_HOST</td><td>指向旧域名 <code>komoju-docs.readme.io</code> 而非 <code>doc.komoju.com</code></td><td><b>跳出当前站 / 潜在失效</b></td><td>6</td></tr>
+          <tr><td>BROKEN_ANCHOR</td><td>目标页存在,但 <code>#anchor</code> 匹配不到任何标题</td><td><b>跳到页顶 / 跳空</b></td><td>2</td></tr>
+          <tr><td>README_PAGE_ORPHAN</td><td><code>/page/&lt;slug&gt;</code> 这类 ReadMe 专有构造,无对应文档</td><td><b>死链</b></td><td>2</td></tr>
+          <tr><td>LEGACY_SLUG</td><td>单段根级遗留 slug(如 <code>/payments-1</code>)映射不到任何页</td><td><b>死链</b></td><td>1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE / TOOLCHAIN -->
+<section id="pipeline">
+  <div class="wrap">
+    <div class="eyebrow">交付纪律与工具 / TOOLCHAIN</div>
+    <h2 class="sec">四个脚本,离线可复现</h2>
+    <p class="sub">抓取、扫描、门禁、修复各司其职,退出码可直接接进 CI。</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>脚本</th><th>职责</th><th>用法</th><th>判据</th></tr></thead>
+        <tbody>
+          <tr><td>fetch_komoju_docs.py</td><td>基于 <code>llms.txt</code> 抓取全套文档快照,按目录落盘</td><td><code>-o komoju_docs</code> / <code>--dry-run</code></td><td class="ok-tag">快照产出</td></tr>
+          <tr><td>check_links.py</td><td>离线扫全站,分类归一化后对照 manifest 判死</td><td><code>--json</code> / <code>--live</code></td><td class="ok-tag">exit 0 / 1 / 2</td></tr>
+          <tr><td>zh_punct_lint.py</td><td>中文书写规范门禁:半角标点残留检查,精确到 <code>file:line:col</code></td><td><code>&lt;改动的 .md ...&gt;</code></td><td class="ok-tag">exit 0 = 放行</td></tr>
+          <tr><td>zh_punct_fix.py</td><td>配套就地修复器,把中文正文里的半角标点转全角(跳过代码/URL)</td><td><code>&lt;改动的 .md ...&gt;</code></td><td class="ok-tag">就地改写</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- DISCIPLINE -->
+<section id="discipline">
+  <div class="wrap">
+    <div class="eyebrow">质量纪律 / DISCIPLINE</div>
+    <h2 class="sec">怎么守住交付质量</h2>
+    <p class="sub">标准落到每一条可机检的纪律上。</p>
+    <div class="rules">
+      <div class="rule">
+        <div class="rk">discipline/precise-location.rule <span class="tag">每条双定位</span></div>
+        <h4>01　精确定位,不放空话</h4>
+        <p>每条问题都给两种定位:<code>.md</code> 原文行号 + 摘录、及渲染页链接。渲染页字段 JS 动态生成、常搜不到,故精确定位一律以 <code>.md</code> 行号为准。</p>
+      </div>
+      <div class="rule">
+        <div class="rk">discipline/no-overlap.rule <span class="tag">三线互补</span></div>
+        <h4>02　三份成果严格去重</h4>
+        <p>质检查<b>内容错</b>、增强补<b>内容缺</b>、坏链查<b>链接死</b>——同一问题只在一份里出现。增强清单开篇即声明:质检已提的一律不再收录。</p>
+      </div>
+      <div class="rule">
+        <div class="rk">discipline/offline-reproducible.rule <span class="tag">exit code = CI</span></div>
+        <h4>03　离线可复现,退出码定判</h4>
+        <p>坏链判定不依赖联网:比对本地文件 + <code>llms.txt</code> 清单;外链默认只分类不判死,<code>--live</code> 才探活。退出码 <code>0/1/2</code> 直接当 CI 判据。</p>
+      </div>
+      <div class="rule">
+        <div class="rk">discipline/zh-punct-gate.rule <span class="tag">门禁不过不交付</span></div>
+        <h4>04　中文书写规范门,一处不漏</h4>
+        <p>中文正文半角标点紧邻汉字即判残留,必须转全角(代码块/行内代码/URL 自动豁免)。首份交付曾查出 <b>118 处</b>残留,此后:<b>门禁不过,不予交付。</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap fin">
+    <div>docs-discovery · KOMOJU 文档质检 &nbsp;|&nbsp; 标准:精确定位、离线可复现、证据确凿</div>
+    <div>
+      <a href="https://github.com/yuanshan8053/docs-discovery" target="_blank">GitHub 仓库</a> ·
+      <a href="https://github.com/yuanshan8053/docs-discovery/blob/main/README.md" target="_blank">README</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
